@@ -55,7 +55,7 @@ const server = new Server(
  * - Human readable name and description
  */
 server.setRequestHandler(ListResourcesRequestSchema, async () => {
-  console.error('[Resources] Listing all available Cloudscape components and patterns');
+  console.debug('[Resources] Listing all available Cloudscape components and patterns');
 
   // Create resources for all components
   const componentResources = Object.values(cloudscapeComponents).map(component => ({
@@ -158,7 +158,7 @@ ${pattern.usage}
  * Takes a cloudscape:// URI and returns the formatted content as markdown.
  */
 server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
-  console.error(`[Resource] Reading resource: ${request.params.uri}`);
+  console.debug(`[Resource] Reading resource: ${request.params.uri}`);
 
   try {
     const uri = request.params.uri;
@@ -172,7 +172,7 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
     const resourceType = matches[1]; // component, pattern, or category
     const resourceId = matches[2];
 
-    console.error(`[Resource] Type: ${resourceType}, ID: ${resourceId}`);
+    console.debug(`[Resource] Type: ${resourceType}, ID: ${resourceId}`);
 
     let content = '';
 
@@ -219,7 +219,7 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
  * Exposes tools for searching components and getting recommendations.
  */
 server.setRequestHandler(ListToolsRequestSchema, async () => {
-  console.error('[Tools] Listing available Cloudscape tools');
+  console.debug('[Tools] Listing available Cloudscape tools');
 
   return {
     tools: [
@@ -264,14 +264,14 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
  * Handler for the search_components and get_component_recommendation tools.
  */
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  console.error(`[Tool] Calling tool: ${request.params.name}`);
+  console.debug(`[Tool] Calling tool: ${request.params.name}`);
 
   switch (request.params.name) {
     case "search_components": {
       try {
         const query = String(request.params.arguments?.query).toLowerCase();
         const category = request.params.arguments?.category as ComponentCategory | undefined;
-        console.error(`[Tool] Searching components with query: ${query}, category: ${category || 'all'}`);
+        console.debug(`[Tool] Searching components with query: ${query}, category: ${category || 'all'}`);
 
         // Filter components by query and category
         const filteredComponents = Object.values(cloudscapeComponents).filter(component => {
@@ -318,7 +318,7 @@ ${component.description}
     case "get_component_recommendation": {
       try {
         const useCase = String(request.params.arguments?.use_case);
-        console.error(`[Tool] Getting component recommendation for use case: ${useCase}`);
+        console.debug(`[Tool] Getting component recommendation for use case: ${useCase}`);
 
         // Very basic recommendation system based on keywords
         const keywords: Record<string, string[]> = {
@@ -393,7 +393,7 @@ ${component.examples[0]?.code || 'No example available'}
  * Exposes prompts for best practices and common patterns.
  */
 server.setRequestHandler(ListPromptsRequestSchema, async () => {
-  console.error('[Prompts] Listing available Cloudscape prompts');
+  console.debug('[Prompts] Listing available Cloudscape prompts');
 
   return {
     prompts: [
@@ -413,7 +413,7 @@ server.setRequestHandler(ListPromptsRequestSchema, async () => {
  * Handler for the cloudscape_best_practices and aws_console_patterns prompts.
  */
 server.setRequestHandler(GetPromptRequestSchema, async (request) => {
-  console.error(`[Prompt] Getting prompt: ${request.params.name}`);
+  console.debug(`[Prompt] Getting prompt: ${request.params.name}`);
 
   if (request.params.name === "cloudscape_best_practices") {
     // Extract best practices from all components
@@ -532,11 +532,11 @@ Would you like me to elaborate on any specific pattern?`
  * This allows the server to communicate via standard input/output streams.
  */
 async function main() {
-  console.error('[Setup] Starting AWS Cloudscape MCP Server');
+  console.debug('[Setup] Starting AWS Cloudscape MCP Server');
   try {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    console.error('[Setup] Server started successfully');
+    console.debug('[Setup] Server started successfully');
   } catch (error) {
     console.error('[Error] Failed to start server:', error);
     process.exit(1);
