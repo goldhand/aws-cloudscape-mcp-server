@@ -1,70 +1,123 @@
-# wills-mcp-server MCP Server
+# AWS Cloudscape Design System MCP Server
 
-A Model Context Protocol server
+An MCP server that provides knowledge and documentation about AWS Cloudscape design system for building AWS Console applications.
 
-This is a TypeScript-based MCP server that implements a simple notes system. It demonstrates core MCP concepts by providing:
+## Overview
 
-- Resources representing text notes with URIs and metadata
-- Tools for creating new notes
-- Prompts for generating summaries of notes
-
-## Features
-
-### Resources
-- List and access notes via `note://` URIs
-- Each note has a title, content and metadata
-- Plain text mime type for simple content access
-
-### Tools
-- `create_note` - Create new text notes
-  - Takes title and content as required parameters
-  - Stores note in server state
-
-### Prompts
-- `summarize_notes` - Generate a summary of all stored notes
-  - Includes all note contents as embedded resources
-  - Returns structured prompt for LLM summarization
-
-## Development
-
-Install dependencies:
-```bash
-npm install
-```
-
-Build the server:
-```bash
-npm run build
-```
-
-For development with auto-rebuild:
-```bash
-npm run watch
-```
+This MCP server provides access to:
+- Component documentation, examples, and best practices
+- Design patterns and usage guidelines
+- Component recommendations based on use cases
+- Component search functionality
 
 ## Installation
 
-To use with Claude Desktop, add the server config:
+```bash
+# Install dependencies
+npm install
 
-On MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
+# Build the server
+npm run build
+```
+
+## Usage
+
+To use this MCP server in Claude:
+
+1. Register the MCP server in your settings.json:
 
 ```json
 {
   "mcpServers": {
-    "wills-mcp-server": {
-      "command": "/path/to/wills-mcp-server/build/index.js"
+    "aws-cloudscape-mcp-server": {
+      "command": "node",
+      "args": ["path/to/build/index.js"],
+      "disabled": false
     }
   }
 }
 ```
 
-### Debugging
+2. Access in Claude using the MCP tools:
 
-Since MCP servers communicate over stdio, debugging can be challenging. We recommend using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector), which is available as a package script:
+```
+use_mcp_tool(aws-cloudscape-mcp-server, search_components, {"query": "button"})
+```
+
+## Available Resources
+
+The server provides the following resources:
+
+- **Component Documentation**: Access detailed documentation for each Cloudscape component, including usage guidelines, examples, and best practices.
+  - URI format: `cloudscape://component/{componentId}`
+  - Example: `cloudscape://component/button`
+
+- **Design Patterns**: Information about common design patterns using Cloudscape components.
+  - URI format: `cloudscape://pattern/{patternId}`
+  - Example: `cloudscape://pattern/empty-state`
+
+- **Component Categories**: Overview of components by category (Container, Form, Table, etc.)
+  - URI format: `cloudscape://category/{categoryName}`
+  - Example: `cloudscape://category/Form`
+
+## Available Tools
+
+### search_components
+
+Search for Cloudscape components by criteria:
+
+```
+use_mcp_tool(aws-cloudscape-mcp-server, search_components, {
+  "query": "input text",
+  "category": "Form" // optional
+})
+```
+
+### get_component_recommendation
+
+Get recommendations for which Cloudscape components to use based on a specific UI need:
+
+```
+use_mcp_tool(aws-cloudscape-mcp-server, get_component_recommendation, {
+  "use_case": "I need a way to show tabular data with sorting and filtering"
+})
+```
+
+## Available Prompts
+
+### cloudscape_best_practices
+
+Get best practices for using the AWS Cloudscape Design System:
+
+```
+access_mcp_resource(aws-cloudscape-mcp-server, cloudscape_best_practices)
+```
+
+### aws_console_patterns
+
+Get common AWS Console design patterns using Cloudscape:
+
+```
+access_mcp_resource(aws-cloudscape-mcp-server, aws_console_patterns)
+```
+
+## Development
+
+Use the MCP inspector to test and debug the server:
 
 ```bash
 npm run inspector
 ```
 
-The Inspector will provide a URL to access debugging tools in your browser.
+Then open the inspector UI in your browser and test the server's resources and tools.
+
+## Components Included
+
+- Button
+- Table
+- Form
+- Header
+- Box
+- Alert
+
+More components can be added by extending the data in `src/data/cloudscape-components.ts`.
