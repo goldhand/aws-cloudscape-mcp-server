@@ -1,16 +1,77 @@
-# AWS Cloudscape Design System MCP Server
+# AWS Cloudscape MCP Server
 
-An MCP server that provides knowledge and documentation about AWS Cloudscape design system for building AWS Console applications.
+A Model Context Protocol (MCP) server that provides knowledge and documentation about the AWS Cloudscape design system for teams building AWS Console applications.
 
-## Overview
+## Features
 
-This MCP server provides access to:
-- Component documentation, examples, and best practices
-- Design patterns and usage guidelines
-- Component recommendations based on use cases
-- Component search functionality
+- **Component Documentation**: Access documentation for Cloudscape components via resources
+- **Search Functionality**: Search for components by name, description, or use case
+- **Recommendations**: Get component recommendations based on UI requirements
+- **Best Practices**: Access Cloudscape design best practices
+- **Design Patterns**: Learn about common AWS Console design patterns
 
 ## Installation
+
+### Option 1: Install from npm (Recommended)
+
+```bash
+# Install globally
+npm install -g aws-cloudscape-mcp-server
+
+# Add to your Cline MCP settings
+npx mcp-config add aws-cloudscape-mcp-server
+```
+
+### Option 2: Manual Setup
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/aws-cloudscape-mcp-server.git
+cd aws-cloudscape-mcp-server
+```
+
+2. Install dependencies and build:
+```bash
+npm install
+npm run build
+```
+
+3. Add to your Cline MCP settings manually by editing:
+`~/Library/Application Support/Code/User/globalStorage/asbx.amzn-cline/settings/cline_mcp_settings.json`
+
+```json
+"aws-cloudscape-mcp-server": {
+  "command": "node",
+  "args": ["/path/to/aws-cloudscape-mcp-server/build/index.js"],
+  "env": {
+    "FASTMCP_LOG_LEVEL": "ERROR"
+  },
+  "disabled": false,
+  "autoApprove": []
+}
+```
+
+## Usage
+
+Once installed and added to your Cline MCP settings, you can use the server through the Cline interface:
+
+### Available Resources
+
+- Component documentation: `cloudscape://component/button`
+- Design pattern documentation: `cloudscape://pattern/empty-state`
+- Category overviews: `cloudscape://category/Form`
+
+### Available Tools
+
+- `search_components`: Search for components by query and category
+- `get_component_recommendation`: Get component recommendations for specific UI needs
+
+### Available Prompts
+
+- `cloudscape_best_practices`: Best practices for using AWS Cloudscape Design System
+- `aws_console_patterns`: Common AWS Console design patterns
+
+## Development
 
 ```bash
 # Install dependencies
@@ -18,106 +79,22 @@ npm install
 
 # Build the server
 npm run build
-```
 
-## Usage
+# Run in watch mode during development
+npm run watch
 
-To use this MCP server in Claude:
-
-1. Register the MCP server in your settings.json:
-
-```json
-{
-  "mcpServers": {
-    "aws-cloudscape-mcp-server": {
-      "command": "node",
-      "args": ["path/to/build/index.js"],
-      "disabled": false
-    }
-  }
-}
-```
-
-2. Access in Claude using the MCP tools:
-
-```
-use_mcp_tool(aws-cloudscape-mcp-server, search_components, {"query": "button"})
-```
-
-## Available Resources
-
-The server provides the following resources:
-
-- **Component Documentation**: Access detailed documentation for each Cloudscape component, including usage guidelines, examples, and best practices.
-  - URI format: `cloudscape://component/{componentId}`
-  - Example: `cloudscape://component/button`
-
-- **Design Patterns**: Information about common design patterns using Cloudscape components.
-  - URI format: `cloudscape://pattern/{patternId}`
-  - Example: `cloudscape://pattern/empty-state`
-
-- **Component Categories**: Overview of components by category (Container, Form, Table, etc.)
-  - URI format: `cloudscape://category/{categoryName}`
-  - Example: `cloudscape://category/Form`
-
-## Available Tools
-
-### search_components
-
-Search for Cloudscape components by criteria:
-
-```
-use_mcp_tool(aws-cloudscape-mcp-server, search_components, {
-  "query": "input text",
-  "category": "Form" // optional
-})
-```
-
-### get_component_recommendation
-
-Get recommendations for which Cloudscape components to use based on a specific UI need:
-
-```
-use_mcp_tool(aws-cloudscape-mcp-server, get_component_recommendation, {
-  "use_case": "I need a way to show tabular data with sorting and filtering"
-})
-```
-
-## Available Prompts
-
-### cloudscape_best_practices
-
-Get best practices for using the AWS Cloudscape Design System:
-
-```
-access_mcp_resource(aws-cloudscape-mcp-server, cloudscape_best_practices)
-```
-
-### aws_console_patterns
-
-Get common AWS Console design patterns using Cloudscape:
-
-```
-access_mcp_resource(aws-cloudscape-mcp-server, aws_console_patterns)
-```
-
-## Development
-
-Use the MCP inspector to test and debug the server:
-
-```bash
+# Test with the MCP inspector
 npm run inspector
 ```
 
-Then open the inspector UI in your browser and test the server's resources and tools.
+## Publishing
 
-## Components Included
+To publish this package to npm:
 
-- Button
-- Table
-- Form
-- Header
-- Box
-- Alert
+1. Update version in package.json
+2. Build the package: `npm run build`
+3. Publish: `npm publish`
 
-More components can be added by extending the data in `src/data/cloudscape-components.ts`.
+## License
+
+MIT

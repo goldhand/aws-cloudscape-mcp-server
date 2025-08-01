@@ -1,20 +1,36 @@
 {
-  "name": "wills-mcp-server",
+  "name": "aws-cloudscape-mcp-server",
   "version": "0.1.0",
-  "description": "A Model Context Protocol server",
-  "private": true,
+  "description": "MCP server providing AWS Cloudscape Design System documentation and tools",
   "type": "module",
   "bin": {
-    "wills-mcp-server": "./build/index.js"
+    "aws-cloudscape-mcp-server": "./build/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/goldhand/aws-cloudscape-mcp-server"
+  },
+  "keywords": [
+    "aws",
+    "cloudscape",
+    "design-system",
+    "mcp",
+    "model-context-protocol",
+    "cline"
+  ],
+  "author": "Will Farley <a.will.farley@gmail.com> (http://www.willfarley.org/)",
+  "license": "MIT",
   "files": [
-    "build"
+    "build",
+    "scripts"
   ],
   "scripts": {
     "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
     "prepare": "npm run build",
     "watch": "tsc --watch",
-    "inspector": "npx @modelcontextprotocol/inspector build/index.js"
+    "inspector": "npx @modelcontextprotocol/inspector build/index.js",
+    "postinstall": "node scripts/install.js",
+    "publish-package": "npm run build && npm publish"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "0.6.0"
