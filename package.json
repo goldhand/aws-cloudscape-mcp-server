@@ -1,6 +1,6 @@
 {
   "name": "aws-cloudscape-mcp-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server providing AWS Cloudscape Design System documentation and tools",
   "type": "module",
   "bin": {
